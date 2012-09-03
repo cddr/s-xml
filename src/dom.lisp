@@ -36,11 +36,12 @@
 (defgeneric print-xml-dom (dom input-type stream pretty level)
   (:documentation "Generate XML output on a character stream from a DOM of input-type, optionally pretty printing using level"))
 
-(defun print-xml (dom &key (stream t) (pretty nil) (input-type :lxml) (header))
+(defun print-xml (dom &key (stream t) (pretty nil) (input-type :lxml) (header) (downcase-identifiers nil))
   "Generate XML output on a character stream (t by default) from a DOM of input-type (:lxml by default), optionally pretty printing (off by default), or adding a header (none by default)"
   (when header (format stream header))
   (when pretty (terpri stream))
-  (print-xml-dom dom input-type stream pretty 1))
+  (let ((*downcase-identifiers-p* downcase-identifiers))
+    (print-xml-dom dom input-type stream pretty 1)))
 
 (defun print-xml-string (dom &key (pretty nil) (input-type :lxml))
   "Generate XML output to a string from a DOM of input-type (:lxml by default), optionally pretty printing (off by default)"

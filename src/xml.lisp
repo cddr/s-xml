@@ -319,9 +319,14 @@
           (push `("" . ,namespace) namespaces)))))
   namespaces)
 
+(defvar *downcase-identifiers-p* nil)
+
 (defun print-identifier (identifier stream &optional as-attribute)
   "Print identifier on stream using namespace conventions"
   (declare (ignore as-attribute) (special *namespaces*))
+  (when *downcase-identifiers-p*
+    (setf identifier (format nil "~a"
+                             (string-downcase (symbol-name identifier)))))
   (if *ignore-namespaces*
       (princ identifier stream)
     (if (symbolp identifier)
